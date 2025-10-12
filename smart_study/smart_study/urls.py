@@ -2,7 +2,7 @@
 URL configuration for smart_study project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
+    https://docs.djangoproject.com/en/5.0/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -19,5 +19,10 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('Study_app.urls')),
+    path('api/v1/auth/', include('users.urls')),  # API for auth
+    path('accounts/', include('django.contrib.auth.urls')),  # Frontend login/logout
+    path('', include('users.urls')),  # Add profile frontend if needed
+    path('api/v1/notes/', include('notes.urls')),  # API for notes
+    path('notes/', include('notes.urls')),  # Frontend for notes
+
 ]

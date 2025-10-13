@@ -6,9 +6,12 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.decorators.csrf import csrf_exempt  # Add this import
+from django.utils.decorators import method_decorator  # Add this import
 from .serializers import RegisterSerializer, UserSerializer
 
-# API Views
+# API Views (Exempt CSRF for Postman/API testing)
+@method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(APIView):
     permission_classes = [AllowAny]
 
@@ -20,6 +23,7 @@ class RegisterView(APIView):
             return Response({'user': UserSerializer(user).data, 'token': token.key}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(APIView):
     permission_classes = [AllowAny]
 
@@ -28,11 +32,12 @@ class LoginView(APIView):
         password = request.data.get('password')
         user = authenticate(request, username=username_or_email, password=password) or authenticate(request, email=username_or_email, password=password)
         if user:
-            login(request, user )
+            login(request, user)
             token, _ = Token.objects.get_or_create(user=user)
             return Response({'token': token.key}, status=status.HTTP_200_OK)
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
 
+@method_decorator(csrf_exempt, name='dispatch')
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -41,6 +46,7 @@ class LogoutView(APIView):
         logout(request)
         return Response(status=status.HTTP_200_OK)
 
+@method_decorator(csrf_exempt, name='dispatch')
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -55,11 +61,11 @@ class ProfileView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Frontend View (simple profile page)
+# Frontend View (Keep CSRF for browser forms)
 class ProfileTemplateView(LoginRequiredMixin, TemplateView):
     template_name = 'users/profile.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
-        return context
+        return context  

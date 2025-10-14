@@ -42,9 +42,12 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        request.user.auth_token.delete()
-        logout(request)
-        return Response(status=status.HTTP_200_OK)
+        try:
+            request.user.auth_token.delete()  # Delete the user's token
+        except Token.DoesNotExist:
+            pass  # Handle case where token is already deleted
+        logout(request)  # End session (optional, since API is token-based)
+        return Response({}, status=status.HTTP_200_OK)
 
 @method_decorator(csrf_exempt, name='dispatch')
 class ProfileView(APIView):

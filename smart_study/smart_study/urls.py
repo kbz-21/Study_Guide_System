@@ -24,5 +24,6 @@ urlpatterns = [
     path('', include('users.urls')),  # Add profile frontend if needed
     path('api/v1/notes/', include('notes.urls')),  # API for notes
     path('notes/', include('notes.urls')),  # Frontend for notes
+    path('api/v1/todolist/', include('todolist.urls')),  # API for todo list
 
 ]

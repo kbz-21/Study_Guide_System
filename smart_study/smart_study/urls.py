@@ -25,5 +25,8 @@ urlpatterns = [
     path('api/v1/notes/', include('notes.urls')),  # API for notes
     path('notes/', include('notes.urls')),  # Frontend for notes
     path('api/v1/todolist/', include('todolist.urls')),  # API for todo list
+    path('api/v1/unitconverter/', include('unitconverter.urls')),  # API for unit converter
+
+    
 
 ]

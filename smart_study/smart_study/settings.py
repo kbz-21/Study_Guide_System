@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'notes',
     'todolist',
-    
+    'unitconverter',
     
     
 ]

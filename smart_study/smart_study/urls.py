@@ -26,6 +26,7 @@ urlpatterns = [
     path('notes/', include('notes.urls')),  # Frontend for notes
     path('api/v1/todolist/', include('todolist.urls')),  # API for todo list
     path('api/v1/unitconverter/', include('unitconverter.urls')),  # API for unit converter
+    path('api/v1/youtubesearch/', include('youtubesearch.urls')),  # API for YouTube search
 
     
 

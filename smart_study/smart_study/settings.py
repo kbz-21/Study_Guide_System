@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     'notes',
     'todolist',
     'unitconverter',
+    'youtubesearch',
+
     
     
 ]

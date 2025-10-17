@@ -90,10 +90,10 @@ http://127.0.0.1:8000/
 
 🛡️ Security & Design Notes
 
-* Uses DRF TokenAuthentication with IsAuthenticated for all API endpoints.
-* User-specific querysets (e.g., user=self.request.user) ensure data isolation.
-* Serializers validate inputs; passwords hashed with Django’s PBKDF2.
-* youtube-search-python avoids API key exposure; consider HTTPS for production.
+# Uses DRF TokenAuthentication with IsAuthenticated for all API endpoints.
+# User-specific querysets (e.g., user=self.request.user) ensure data isolation.
+# Serializers validate inputs; passwords hashed with Django’s PBKDF2.
+# youtube-search-python avoids API key exposure; consider HTTPS for production.
 
 👨‍💻 Author
 

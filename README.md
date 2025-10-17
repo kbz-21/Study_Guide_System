@@ -1,17 +1,16 @@
 # 📘 Study Guide System
 
 A **personal productivity and learning web application** built with **Django**.  
-The Study Guide System helps students and lifelong learners organize their study activities by combining multiple essential tools—notes, tasks, homework, and study aids—into one unified platform.
-
+The 'Study Guide System' is a Django-based web application designed to assist students in managing their studies efficiently through a suite of productivity tools. It provides a backend-only API-driven platform for authenticated users to organize notes, tasks, unit conversions, and search YouTube videos without leaving the system. The project prioritizes modularity, security, and beginner-friendly implementation, making it extensible for future frontend integration.
 ---
 
 ## 🚀 Key Features
 
-- 📝 **Notepad:** Create, edit, and organize personal study notes.  
+- 📝 **Notepad:** CRUD operations for user-specific notes (title, content, archive status).  
 - ✅ **To-Do List:** Manage study tasks and deadlines with progress tracking.  
-- 📚 **Homework Writer:** Write and save assignments or study summaries.  
-- 🎥 **YouTube Search:** Integrated **YouTube Data API v3** for finding educational videos.  
-- 🔐 **User Authentication:** Secure login and registration for personalized access.  
+- 📚 **Unit Converter:** Convert length (yard ↔ foot) and mass (pound ↔ kilogram), with history tracking.  
+- 🎥 **YouTube Search:** Search YouTube videos (title, video ID, channel, thumbnail, URL) using youtube-search-python library, with history tracking.  
+- 🔐 **Users App:** User authentication (register, login, logout, profile) using Django REST Framework (DRF) TokenAuthentication.  
 ---
 
 ## 🧩 Project Structure
@@ -20,10 +19,9 @@ The Study Guide System helps students and lifelong learners organize their study
 |------|--------------|
 | `users` | Handles registration, login, and profile management |
 | `notes` | Notepad for creating and managing study notes |
-| `homework` | Writing and saving assignments |
-| `tasks` | To-do list for managing tasks and goals |
-| `videos` | YouTube API integration for study content |
-| `tools` | Utility functions such as unit converter |
+| `To do list` | To-do list for managing tasks and goals |
+| `unit converter` | Convert units from one to other |
+| `YouTube Search` | YouTube API integration for study content |
 
 ---
 
@@ -31,10 +29,12 @@ The Study Guide System helps students and lifelong learners organize their study
 
 | Model | Key Fields |
 |--------|-------------|
-| **User** | username, email, password |
-| **Note** | title, content, created_at, updated_at |
-| **Task** | description, is_completed, due_date |
-| **Homework** | subject, content, created_at |
+| **CustomUser** | username, email, first_name, last_name |
+| **Note** | user, title, content, is_archived, created_at, updated_at |
+| **ToDo** | user, title, description, is_completed, created_at, updated_at |
+| **Conversion** | user, value, from_unit, to_unit, result, created_at |
+| **YouTubeSearchHistory** | user, query, created_at |
+
 
 ---
 
@@ -73,20 +73,30 @@ http://127.0.0.1:8000/
 🛠️ Technologies Used
 
 # Backend: Django (Python)
-# Frontend: HTML, CSS, Bootstrap
-# Database: SQLite 
-# API: YouTube Data API v3
-# Hosting (planned): Render / Heroku
+# Framework: Django, Django REST Framework for APIs.
+# Authentication: DRF TokenAuthentication, ensuring user-specific data access.
+# Libraries:
+  - youtube-search-python for YouTube video search (scraping-based, no API key).
+  - django.contrib.auth for user management.
+# Tools: Postman for API testing, Django Admin for data inspection.
+# Environment: Python 3.x, virtual environment, requirements.txt for dependencies.
+# Database: SQLite
+
+📧 API Used:
+
+# Internal APIs: All apps expose RESTful endpoints under /api/v1/ for CRUD and specific actions
+# External Integration: youtube-search-python for YouTube search (no official YouTube Data API v3
+# Hosting (planned): pythonAnwhere
 
 🛡️ Security & Design Notes
 
-* Implements Django’s built-in CSRF protection and secure session handling
-* Modular architecture (separate apps for maintainability)
-* Prepared for deployment with HTTPS configuration
-
+* Uses DRF TokenAuthentication with IsAuthenticated for all API endpoints.
+* User-specific querysets (e.g., user=self.request.user) ensure data isolation.
+* Serializers validate inputs; passwords hashed with Django’s PBKDF2.
+* youtube-search-python avoids API key exposure; consider HTTPS for production.
 
 👨‍💻 Author
 
 Kaleab Zewdie
 📧 kaleabzewdie972@gmail.com
-💻 Django Developer | Capstone Project Contributor
+💻 junior Back-end developer | Capstone Project Contributor

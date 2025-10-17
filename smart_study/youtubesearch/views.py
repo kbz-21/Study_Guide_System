@@ -1,5 +1,3 @@
-import os
-import requests
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -7,15 +5,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from dotenv import load_dotenv
+from youtubesearchpython import VideosSearch
 from .models import YouTubeSearchHistory
 from .serializers import SearchHistorySerializer, SearchRequestSerializer
-
-load_dotenv()
-
-# YouTube API endpoint
-YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3/search'
-API_KEY = os.getenv('YOUTUBE_API_KEY')
 
 # API: Perform YouTube search and save history
 @method_decorator(csrf_exempt, name='dispatch')
@@ -26,38 +18,29 @@ class YouTubeSearchView(APIView):
         serializer = SearchRequestSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-        if not API_KEY:
-            return Response({'error': 'YouTube API key not configured.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         query = serializer.validated_data['q']
-        params = {
-            'part': 'snippet',
-            'q': query,
-            'type': 'video',
-            'maxResults': 10,
-            'order': 'relevance',
-            'key': API_KEY,
-        }
-
         try:
-            response = requests.get(YOUTUBE_API_URL, params=params)
-            response.raise_for_status()
-            data = response.json()
+            search = VideosSearch(query, limit=10)
+            results = search.result()['result']
 
-            # Process results
+            # Process results with validation
             videos = []
-            for item in data.get('items', []):
-                snippet = item['snippet']
-                video_id = item['id']['videoId']
-                videos.append({
-                    'video_id': video_id,
-                    'title': snippet['title'],
-                    'channel': snippet['channelTitle'],
-                    'thumbnail': snippet['thumbnails']['default']['url'],
-                    'published_at': snippet['publishedAt'],
-                    'url': f'https://www.youtube.com/watch?v={video_id}',
-                })
+            for item in results:
+                # Skip if critical fields are missing or None
+                if not all([item.get('id'), item.get('title'), item.get('channel'), item.get('thumbnails')]):
+                    continue
+                try:
+                    videos.append({
+                        'video_id': item['id'],
+                        'title': item['title'],
+                        'channel': item['channel'].get('name', 'Unknown Channel'),
+                        'thumbnail': item['thumbnails'][0]['url'] if item['thumbnails'] else '',
+                        'published_at': item.get('publishedTime', 'Unknown'),
+                        'url': f"https://www.youtube.com/watch?v={item['id']}"
+                    })
+                except (KeyError, TypeError, IndexError):
+                    continue  # Skip malformed entries
 
             # Save to history
             YouTubeSearchHistory.objects.create(user=request.user, query=query)
@@ -65,13 +48,11 @@ class YouTubeSearchView(APIView):
             return Response({
                 'query': query,
                 'videos': videos,
-                'total_results': data.get('pageInfo', {}).get('totalResults', 0),
+                'total_results': len(videos),
             }, status=status.HTTP_200_OK)
 
-        except requests.exceptions.RequestException as e:
-            return Response({'error': f'API request failed: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
-            return Response({'error': f'Unexpected error: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': f'Search failed: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # API: List search history
 @method_decorator(csrf_exempt, name='dispatch')

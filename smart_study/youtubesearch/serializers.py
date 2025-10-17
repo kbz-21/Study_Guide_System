@@ -7,6 +7,6 @@ class SearchHistorySerializer(serializers.ModelSerializer):
         model = YouTubeSearchHistory
         fields = ['id', 'query', 'created_at']
 
-# Serializer for search request (simple)
+# Serializer for search request
 class SearchRequestSerializer(serializers.Serializer):
     q = serializers.CharField(max_length=255)

@@ -1,7 +1,8 @@
 # 📘 Study Guide System
-
-A **personal productivity and learning web application** built with **Django**.  
-The 'Study Guide System' is a Django-based web application designed to assist students in managing their studies efficiently through a suite of productivity tools. It provides a backend-only API-driven platform for authenticated users to organize notes, tasks, unit conversions, and search YouTube videos without leaving the system. The project prioritizes modularity, security, and beginner-friendly implementation, making it extensible for future frontend integration.
+<small>
+A "personal productivity and learning web application" built with 'Django'.  
+The 'Study Guide System' is a Django-based web application designed to assist students in managing their studies efficiently through a suite of productivity tools. It provides a backend-only API-driven platform for authenticated users to organize notes, tasks, unit conversions, and search YouTube videos without leaving the system. The project prioritizes modularity, security, and beginner-friendly implementation, making it extensible for future frontend integration. 
+</small>
 ---
 
 ## 🚀 Key Features
@@ -46,7 +47,7 @@ The 'Study Guide System' is a Django-based web application designed to assist st
 git clone https://github.com/kbz-21/Study_Guide_System.git
 cd Study_Guide_System
 
-2️⃣ Create and Activate Virtual Environment
+### 2️⃣ Create and Activate Virtual Environment
 
 python -m venv venv
 # On Windows

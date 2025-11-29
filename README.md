@@ -1,302 +1,92 @@
--  STUDY GUIDE SYSTEM PROJECT 
--  API end point functinality Testing(using postman)
--  This system also configured swagger for seeing easly the end points.
-
-.........................................................................
-USERS APP       1st 
-.........................................................................
-1.http://127.0.0.1:8000/api/v1/auth/register/    
-  - function:  register new user
-  - method - POST
-  - body
-
- {
-  "username": "jerry",
-  "email": "jerry1921@gmail.com",
-  "password": "pass123",
-  "first_name": "Test",
-  "last_name": "User"
-
-  }
-
-
-
-2. http://127.0.0.1:8000/api/v1/auth/login/
-   - function: if user is registered can login 
-   - method - POST
-   - body
-
-{
-  "username_or_email": "jerry",
-  "password": "pass123"
-}
-
-
-3. http://127.0.0.1:8000/api/v1/auth/logout/
-   - function: a logged in user can log out from the system.
-   - method - POST
-   - key : Authentication  , value : Token <your tooken>
-
-
-   AGAIN LOG IN BECAUSE NO YOU HAVE LOGGED OUT...
-
-
-4. http://127.0.0.1:8000/api/v1/auth/profile/
-   - function:
-   - method - GET
-
- OUTPUT EXPECTED
-
-   {
-    "id": 5,
-    "username": "kal",
-    "email": "kalzed1921@gmail.com",
-    "first_name": "Test",
-    "last_name": "User",
-    "profile_info": ""
-   }
-
-
-.........................................................................................
-NOTE APP            2nd 
-.........................................................................................
-
-5. http://127.0.0.1:8000/api/v1/notes/
-   - function: user can create notes
-   - method - POST
-   - body
-
-   {
-    "title": "My First Note",
-    "content": "This is a test note for the Study Guide System."
-   }
-
-  OUTPUT EXPECTED
-
-   {
-    "id": 2,
-    "title": "My First Note",
-    "content": "This is a test note for the Study Guide System.",
-    "created_at": "2025-10-14T12:56:15.806154Z",
-    "updated_at": "2025-10-14T12:56:15.806212Z",
-    "is_archived": false
-   }
+# 📘 Study Guide System
 
+A **personal productivity and learning web application** built with **Django**.  
+The Study Guide System helps students and lifelong learners organize their study activities by combining multiple essential tools—notes, tasks, homework, and study aids—into one unified platform.
 
-6. http://127.0.0.1:8000/api/v1/notes/
-   - function: user can see his personal created notes
-   - method - GET
-   - Body (empty)
-
- OUTPUT EXPECTED
-{
-    "count": 3,
-    "next": null,
-    "previous": null,
-    "results": [
-        {
-            "id": 1,
-            "title": "My First Note",
-            "content": "This is a test note for the Study Guide System.",
-            "created_at": "2025-10-14T12:41:31.729137Z",
-            "updated_at": "2025-10-14T12:41:31.729179Z",
-            "is_archived": false
-        },
-        {
-            "id": 2,
-            "title": "My First Note",
-            "content": "This is a test note for the Study Guide System.",
-            "created_at": "2025-10-14T12:56:15.806154Z",
-            "updated_at": "2025-10-14T12:56:15.806212Z",
-            "is_archived": false
-        },
+---
 
-    ]
-}
+## 🚀 Key Features
 
+- 📝 **Notepad:** Create, edit, and organize personal study notes.  
+- ✅ **To-Do List:** Manage study tasks and deadlines with progress tracking.  
+- 📚 **Homework Writer:** Write and save assignments or study summaries.  
+- 🎥 **YouTube Search:** Integrated **YouTube Data API v3** for finding educational videos.  
+- 🔐 **User Authentication:** Secure login and registration for personalized access.  
+---
 
+## 🧩 Project Structure
 
-7. http://127.0.0.1:8000/api/v1/notes/3   
-   - function: user can see his specific (single) notes by refering id
-   - method - GET
+| App | Description |
+|------|--------------|
+| `users` | Handles registration, login, and profile management |
+| `notes` | Notepad for creating and managing study notes |
+| `homework` | Writing and saving assignments |
+| `tasks` | To-do list for managing tasks and goals |
+| `videos` | YouTube API integration for study content |
+| `tools` | Utility functions such as unit converter |
 
-OUTPUT EXPECTED
+---
 
-{
-    "id": 3,
-    "title": "My First Note",
-    "content": "This is a test note for the Study Guide System.The tester name is kaleab zewdie
-     an alx back end learner.this is last week for graduation and finalproject is goin to done 
-     for graduation purpose.and show case our skill what we have learned.",
-    "created_at": "2025-10-14T18:00:59.885404Z",
-    "updated_at": "2025-10-14T18:00:59.885442Z",
-    "is_archived": false
-}
+## 🗄️ Database Overview
 
+| Model | Key Fields |
+|--------|-------------|
+| **User** | username, email, password |
+| **Note** | title, content, created_at, updated_at |
+| **Task** | description, is_completed, due_date |
+| **Homework** | subject, content, created_at |
 
-8. http://127.0.0.1:8000/api/v1/notes/3/
-   - function: user update notes
-   - method - PUT
-   - body  
-   {
-    "title": "Updated Note",
-    "content": "This is an updated test note."
-   }
+---
 
-......
 
+## ⚙️ Installation & Setup
 
-9. http://127.0.0.1:8000/api/v1/notes/3/archive/
-   - function: Archive a Note
-   - method - PATCH
-   - body  - empty
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/kbz-21/Study_Guide_System.git
+cd Study_Guide_System
 
+2️⃣ Create and Activate Virtual Environment
 
-OUTPUT EXPECTED
+python -m venv venv
+# On Windows
+venv\Scripts\activate
+# On macOS/Linux
+source venv/bin/activate
 
 
-{
-    "id": 3,
-    "title": "Updated Note",
-    "content": "This is a test note for the Study Guide System. The tester name is kaleab zewdie
-    an alx back end learner. This is last week for graduation and final project is goin to done for graduation
-    purpose. and show case our skill what we have learned.",
-    "created at": "2025-10-14T18:00:59.885404Z",
-    "updated at": "2025-10-14T19:08:27.826752Z",
-    "is archived": true
-}
+3️⃣ Install Dependencies
+- pip install -r requirements.txt
 
+4️⃣ Apply Migrations
+- python manage.py migrate
 
+5️⃣ Run the Development Server
+- python manage.py runserver
 
-10. http://127.0.0.1:8000/api/v1/notes/1/
-   - function: user  delete notes
-   - method - DELETE
-   - body - empty
+6️⃣ Access the App
 
-OUTPUT EXPECTED 
+Open your browser and go to:
+http://127.0.0.1:8000/
 
-[]
 
+🛠️ Technologies Used
 
-.........................................................................................
-TO DO LIST APP          3rd 
-.........................................................................................
+# Backend: Django (Python)
+# Frontend: HTML, CSS, Bootstrap
+# Database: SQLite 
+# API: YouTube Data API v3
+# Hosting (planned): Render / Heroku
 
-11.http://127.0.0.1:8000/api/v1/todolist/
-   - function: user Create personal To-Do 
-   - method - POST
-   - body  - 
-   {
-    "title": " 12:00 ",
-    "description": " weakup and take shower, then wear uniform "
-    }
+🛡️ Security & Design Notes
 
+* Implements Django’s built-in CSRF protection and secure session handling
+* Modular architecture (separate apps for maintainability)
+* Prepared for deployment with HTTPS configuration
 
-12. http://127.0.0.1:8000/api/v1/todolist/
-   - function: List all availabe To-Dos
-   - method - GET
-   - body  - empty
 
-13. http://127.0.0.1:8000/api/v1/todolist/1/
+👨‍💻 Author
 
-   - function: Retrieve to-do's by id
-   - method - GET
-   - body  - empty
-
-14. http://127.0.0.1:8000/api/v1/todolist/1/
-   - function: Update To Do list single task
-   - method - PUT
-   - body  -
-    {
-    "title": "Study Advanced Python",
-    "description": "Focus on DRF serializers"
-    }
-
-
-15. http://127.0.0.1:8000/api/v1/todolist/1/complete/
-   - function:  Mark Complete if the task is done
-   - method - PATCH
-   - body  - empty
-
-16. http://127.0.0.1:8000/api/v1/todolist/1/
-
-   - function: Delete single task by selecting it's id
-   - method - DELETE
-   - body  - empty
-
-
-.........................................................................................
-UNIT CONVERTER APP              4th
-.........................................................................................
-
-
-17. http://127.0.0.1:8000/api/v1/unitconverter/convert/
-   - function:  perform conversion
-   - method - POST
-   - body  - 
-   {
-    "value": 10,
-    "from_unit": "yard",
-    "to_unit": "foot"
-   }
-
-
-   
-
-
-
-other unit testing
-   {
-    "value": 5,
-    "from_unit": "pound",
-    "to_unit": "kilogram"
-   }
-
-
-18. http://127.0.0.1:8000/api/v1/unitconverter/history/
-   - function: List Conversion History
-   - method - GET
-   - body  - empty
-
-
-19. http://127.0.0.1:8000/api/v1/unitconverter/history/1/
-   - function: user can see single conversion history using specific id
-   - method - GET
-   - body  - empty
-
-
-.........................................................................................
-YOUTUBE SEARCH APP              5th
-.........................................................................................
-
-
-
-20.  http://127.0.0.1:8000/api/v1/youtubesearch/search/   
-   - function: user can search youtube video's using queries...
-   - method - POST
-   - body  - 
-
-   {
-    "q": "python tutorial"
-   }
-
-
-	OUTPUT ("10 searches will fetch from youtube and " )
-
-        {
-            "video_id": "K5KVEU3aaeQ",
-            "title": "Python Full Course for Beginners [2025]",
-            "channel": "Programming with Mosh",
-            "thumbnail": "https://i.ytimg.com/vi/K5KVEU3aaeQ/hq720.jpg?sqp=-   				oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAXbPvWkQhvRSOYWD6mp9EVbfWSYg",
-            "published_at": "8 months ago",
-            "url": "https://www.youtube.com/watch?v=K5KVEU3aaeQ"
-        },
-.
-
-21. http://127.0.0.1:8000/api/v1/youtubesearch/history/
-   - function: user can see his previous search history
-   - method - GET
-   - body  -  empty
-
-
-output .. history becomes listed
+Kaleab Zewdie
+📧 kaleabzewdie972@gmail.com
+💻 Django Developer | Capstone Project Contributor

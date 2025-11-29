@@ -15,19 +15,53 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Smart Study System API",           # Your API Title
+        default_version='v1',                     # v1
+        description="""
+        A complete backend for students: notes, to-do lists,
+        unit converter (yard ↔ foot, pound ↔ kg) and YouTube video search.  
+        All endpoints are token-authenticated and user-scoped.
+        """,
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/auth/', include('users.urls')),  # API for auth
-    path('accounts/', include('django.contrib.auth.urls')),  # Frontend login/logout
-    path('', include('users.urls')),  # Add profile frontend if needed
-    path('api/v1/notes/', include('notes.urls')),  # API for notes
-    path('notes/', include('notes.urls')),  # Frontend for notes
-    path('api/v1/todolist/', include('todolist.urls')),  # API for todo list
-    path('api/v1/unitconverter/', include('unitconverter.urls')),  # API for unit converter
-    path('api/v1/youtubesearch/', include('youtubesearch.urls')),  # API for YouTube search
 
-    
+    # AUTH APIs
+    path('api/v1/auth/', include('users.urls')),  
 
+    # DJANGO BUILT-IN LOGIN PAGES
+    path('accounts/', include('django.contrib.auth.urls')),
+
+    # FRONTEND HOME ROUTES
+    path('', include('users.urls')),
+
+    # NOTES
+    path('api/v1/notes/', include('notes.urls')),
+    path('notes/', include('notes.urls')),
+
+    # TODO LIST
+    path('api/v1/todolist/', include('todolist.urls')),
+
+    # UNIT CONVERTER
+    path('api/v1/unitconverter/', include('unitconverter.urls')),
+
+    # YOUTUBE SEARCH
+    path('api/v1/youtubesearch/', include('youtubesearch.urls')),
+
+    # SWAGGER
+    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+
+    # REDOC
+    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     'todolist',
     'unitconverter',
     'youtubesearch',
-    'drf_yasg',
+    'drf_yasg', 
 
     
     

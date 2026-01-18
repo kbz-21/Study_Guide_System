@@ -169,3 +169,4 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 # SWAGGER_SETTINGS = 
+# this is optional and can be customized as needed
